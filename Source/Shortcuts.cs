@@ -1,6 +1,9 @@
-﻿namespace IWshUtility
+﻿using System;
+using System.IO;
+
+namespace IWshUtility
 {
-	public class Shortcuts
+	public static class Shortcuts
 	{
 		public static bool CreateShortcut(string location, string path, string target, string args, string name, string desc)
 		{

@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<TargetFrameworks>net45;net48;netstandard2.0;net8.0;net10.0</TargetFrameworks>
 		<DebugType>embedded</DebugType>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<BaseOutputPath>..\Build</BaseOutputPath>
@@ -43,5 +41,13 @@
 	    <PackagePath>\</PackagePath>
 	  </None>
 	</ItemGroup>
-
+	<ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+	  <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+	  <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+	</ItemGroup>
 </Project>
