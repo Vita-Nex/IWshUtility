@@ -1,53 +1,44 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace IWshUtility
+namespace System.Windows.Shell
 {
 	public static class Shortcuts
 	{
-		public static bool CreateShortcut(string location, string path, string target, string args, string name, string desc)
+		public static void CreateShortcut(string location, string path, string target, string args, string name, string desc)
 		{
-			if (String.IsNullOrWhiteSpace(location) || String.IsNullOrWhiteSpace(target))
+			_ = Directory.CreateDirectory(location);
+
+			location = Path.Combine(location, $"{name}.lnk");
+
+			if (File.Exists(location))
 			{
-				return false;
+				File.Delete(location);
 			}
 
-			try
+			var shortcut = Shell.CreateShortcut(location);
+
+			if (!String.IsNullOrWhiteSpace(args))
 			{
-				_ = Directory.CreateDirectory(location);
-
-				location = Path.Combine(location, $"{name}.lnk");
-
-				if (File.Exists(location))
-				{
-					File.Delete(location);
-				}
-
-				var shell = new IWshRuntimeLibrary.WshShell();
-				var shortcut = shell.CreateShortcut(location);
-
-				if (!String.IsNullOrWhiteSpace(args))
-				{
-					shortcut.Arguments = args;
-				}
-
-				if (!String.IsNullOrWhiteSpace(desc))
-				{
-					shortcut.Description = desc;
-				}
-
-				shortcut.WorkingDirectory = path;
-
-				shortcut.TargetPath = Path.Combine(path, target);
-
-				shortcut.Save();
-
-				return true;
+				shortcut.Arguments = args;
 			}
-			catch
+
+			if (!String.IsNullOrWhiteSpace(desc))
 			{
-				return false;
+				shortcut.Description = desc;
 			}
+
+			shortcut.WorkingDirectory = path;
+
+			shortcut.TargetPath = Path.Combine(path, target);
+
+			shortcut.Save();
+		}
+
+		public static Task CreateShortcutAsync(string location, string path, string target, string args, string name, string desc, CancellationToken token = default)
+		{
+			return Task.Run(() => CreateShortcut(location, path, target, args, name, desc), token);
 		}
 	}
 }
